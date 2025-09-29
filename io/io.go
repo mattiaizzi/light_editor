@@ -10,6 +10,10 @@ type Renderer interface {
 	Clear() error
 }
 
+type InputHandler interface {
+	Read() error
+}
+
 type ANSIRenderer struct {
 	writer io.Writer
 }

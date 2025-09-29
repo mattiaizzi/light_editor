@@ -1,17 +1,21 @@
 package main
 
 import (
-	"fmt"
+	"log"
+	"os"
 
 	"github.com/mattiaizzi/light_editor/editor"
 	"github.com/mattiaizzi/light_editor/io"
 )
 
 func main() {
+	args := os.Args[1:]
+	p := args[0]
 	r := io.InitANSIRenderer()
-	e, err := editor.InitEditor(r, "file.txt")
+	e := editor.InitEditor(r)
+	err := e.Open(p)
 	if err != nil {
-		fmt.Println(err)
+		log.Fatalf("Error: %v", err)
 	}
 	e.Render()
 }
