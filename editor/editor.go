@@ -12,6 +12,7 @@ type Editor struct {
 	buffer   *Buffer
 }
 
+// InitEditor creates a new Editor with an empty buffer
 func InitEditor(r io.Renderer) Editor {
 	editor := Editor{
 		renderer: r,
@@ -20,6 +21,8 @@ func InitEditor(r io.Renderer) Editor {
 	return editor
 }
 
+// Open opens a file at the specified path p and load its content.
+// If the file is successfully opened it returns nil, an error otherwise
 func (e *Editor) Open(p string) error {
 	f, err := os.ReadFile(p)
 	if err != nil {
@@ -29,6 +32,8 @@ func (e *Editor) Open(p string) error {
 	return nil
 }
 
+// Clear clears the Editor Renderer
+// Returns an error if the Renderer cannot be cleared, nil otherwise
 func (e Editor) Clear() error {
 	return e.renderer.Clear()
 }
@@ -39,6 +44,7 @@ func (e Editor) Render() error {
 		content[i] = make([]byte, len(l.content))
 		copy(content[i], l.content)
 	}
+	e.moveCursor(0, 0)
 	return e.renderer.Render(bytes.Join(content, []byte("\n")))
 }
 
@@ -49,6 +55,10 @@ func (e *Editor) setContent(c []byte) {
 		// TODO move add lines to buffer type
 		e.buffer.lines = append(e.buffer.lines, bl)
 	}
+}
+
+func (e Editor) moveCursor(row uint, col uint) {
+	e.renderer.MoveCursor(0, 0)
 }
 
 type Line struct {
